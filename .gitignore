@@ -1,0 +1,47 @@
+# --- macOS ---
+.DS_Store
+._*
+
+# --- Editor ---
+.vscode/
+.idea/
+*.swp
+*~
+
+# --- Secrets ---
+.env
+.env.*
+*.pem
+*.key
+id_*
+!id_*.pub
+secrets/
+
+# --- Ansible ---
+*.retry
+.vault_pass
+.vault_pass.txt
+vault_pass*
+.ansible/
+
+# --- Terraform / OpenTofu ---
+.terraform/
+*.tfstate
+*.tfstate.*
+crash.log
+crash.*.log
+*.tfvars
+*.tfvars.json
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+
+# --- Python ---
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# --- Logs ---
+*.log
