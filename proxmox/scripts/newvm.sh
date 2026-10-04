@@ -1,7 +1,7 @@
 #!/bin/bash
 
 if [[ $# -ne 4 ]]; then
-    echo "Illegal number of parameters\n
+    echo "Illegal number of parameters
     ./newvm.sh <id> <name> <ip> <disk_size>" >&2
     exit 1
 fi
@@ -50,8 +50,6 @@ if [ $? -ne 0 ]; then
   exit 1
 fi
 
-printf "To connect to created VM use:\n
-SSH - debian@$ip\n
-with username: debian\n
-and password given at the start of the script :)
-\n"
+printf "\nVM is starting, cloud-init needs a minute or two.\n"
+printf "SSH (key only): ssh debian@%s\n" "$ip"
+printf "Password is for the Proxmox console only (SSH password login is disabled).\n"
