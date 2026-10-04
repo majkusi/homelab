@@ -29,7 +29,7 @@ if [ $? -ne 0 ]; then
   exit 1
 fi
 
-printf "\nReside disk\n"
+printf "\nResize disk\n"
 qm resize $id scsi0 +$disk_size
 if [ $? -ne 0 ]; then
   echo "Error: Failed to set disk size"
