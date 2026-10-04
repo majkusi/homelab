@@ -13,7 +13,7 @@ disk_size="$4"
 printf "\nChecking if ID: %s is available\n" "$id"
 qm status "$id" > /dev/null 2>&1
 if [ $? -eq 0 ]; then
-  printf "Error: ID: %s unavailable\n" "$id"
+  printf "Error: ID: %s unavailable\n" "$id" >&2
   exit 1
 fi
 
@@ -24,35 +24,35 @@ echo
 printf "\nClone\n"
 qm clone 9000 "$id" --name "$name" > /dev/null
 if [ $? -ne 0 ]; then
-  printf "Error: Failed to clone\n"
+  printf "Error: Failed to clone\n" >&2
   exit 1
 fi
 
 printf "\nSet ip, gateway\n"
 qm set "$id" --ipconfig0 ip="$ip"/24,gw=192.168.0.1 > /dev/null
 if [ $? -ne 0 ]; then
-  printf "Error: Failed to set ip or gw\n"
+  printf "Error: Failed to set ip or gw\n" >&2
   exit 1
 fi
 
 printf "\nResize disk\n"
 qm resize "$id" scsi0 +"$disk_size" > /dev/null
 if [ $? -ne 0 ]; then
-  printf "Error: Failed to set disk size\n"
+  printf "Error: Failed to set disk size\n" >&2
   exit 1
 fi
 
 printf "\nSet password\n"
 qm set "$id" --cipassword "$password" > /dev/null
 if [ $? -ne 0 ]; then
-  printf "Error: Failed to set password\n"
+  printf "Error: Failed to set password\n" >&2
   exit 1
 fi
 
 printf "\nStart vm\n"
 qm start "$id" > /dev/null
 if [ $? -ne 0 ]; then
-  printf "Error: Failed to start vm\n"
+  printf "Error: Failed to start vm\n" >&2
   exit 1
 fi
 
