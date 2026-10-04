@@ -1,0 +1,8 @@
+---
+- name: Upgrade the OS
+  ansible.builtin.apt:
+    upgrade: dist
+    update_cache: true
+- name: Install packages
+  ansible.builtin.apt:
+    pkg: "{{ base_packages + base_packages_extra }}"

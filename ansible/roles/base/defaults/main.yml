@@ -1,0 +1,6 @@
+---
+base_packages:
+  - git
+  - htop
+  - curl
+base_packages_extra:

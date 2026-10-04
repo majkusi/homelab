@@ -1,0 +1,8 @@
+---
+- name: VM Playbook
+  hosts: vms
+  become: true
+
+  roles:
+    - role: base
+    - role: ssh_hardening

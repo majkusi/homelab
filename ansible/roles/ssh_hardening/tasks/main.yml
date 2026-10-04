@@ -1,0 +1,11 @@
+---
+- name: Copy 00-hardening.conf
+  ansible.builtin.copy:
+    src: 00-hardening.conf
+    dest: /etc/ssh/sshd_config.d/
+    mode: "0644"
+    owner: root
+    group: root
+    validate: /usr/sbin/sshd -t -f %s
+  notify:
+    - Restart ssh daemon
