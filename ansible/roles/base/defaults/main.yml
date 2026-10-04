@@ -3,4 +3,4 @@ base_packages:
   - git
   - htop
   - curl
-base_packages_extra:
+base_packages_extra: []
