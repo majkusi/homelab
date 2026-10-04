@@ -1,38 +1,44 @@
-Role Name
-=========
+# ssh_hardening
 
-A brief description of the role goes here.
+Disables root login and password authentication in SSH. Only key-based login remains.
 
-Requirements
-------------
+## What it does
 
-Any pre-requisites that may not be covered by Ansible itself or the role should be mentioned here. For instance, if the role uses the EC2 module, it may be a good idea to mention in this section that the boto package is required.
+- Copies `files/00-hardening.conf` to `/etc/ssh/sshd_config.d/` (root:root, 0644)
+- Validates the config with `sshd -t` before replacing it, so a broken file never lands on the host
+- Restarts the `ssh` service on change (handler)
 
-Role Variables
---------------
+Settings:
 
-A description of the settable variables for this role should go here, including any variables that are in defaults/main.yml, vars/main.yml, and any variables that can/should be set via parameters to the role. Any variables that are read from other roles and/or the global scope (ie. hostvars, group vars, etc.) should be mentioned here as well.
+| Option                         | Value |
+| ------------------------------ | ----- |
+| `PermitRootLogin`              | `no`  |
+| `PasswordAuthentication`       | `no`  |
+| `KbdInteractiveAuthentication` | `no`  |
 
-Dependencies
-------------
+The `00-` prefix is intentional: in `sshd_config.d/` the first value read wins,
+so this file must load before e.g. `50-cloud-init.conf`.
 
-A list of other roles hosted on Galaxy should go here, plus any details in regards to parameters that may need to be set for other roles, or variables that are used from other roles.
+## Requirements
 
-Example Playbook
-----------------
+- Debian/Ubuntu with OpenSSH that reads `Include /etc/ssh/sshd_config.d/*.conf`
+- **A working SSH key for `ansible_user` before running.** Otherwise you will lock yourself out
 
-Including an example of how to use your role (for instance, with variables passed in as parameters) is always nice for users too:
+## Variables
 
-    - hosts: servers
-      roles:
-         - { role: username.rolename, x: 42 }
+None. Settings are static. If they ever need to differ between hosts: `templates/` + the `template` module.
 
-License
--------
+## Usage
 
-BSD
+```yaml
+- hosts: vms
+  become: true
+  roles:
+    - ssh_hardening
+```
 
-Author Information
-------------------
+## Verification
 
-An optional section for the role authors to include contact information, or a website (HTML is not allowed).
+```bash
+sudo sshd -T | grep -Ei 'permitrootlogin|passwordauthentication|kbdinteractive'
+```
