@@ -10,6 +10,12 @@ name="$2"
 ip="$3"
 disk_size="$4"
 
+ping -c 1 -W 1 "$ip" > /dev/null
+if [ $? -eq 0 ]; then
+  printf "Error: IP: %s already taken, please try different one\n" "$ip" >&2
+  exit 1
+fi
+
 printf "\nChecking if ID: %s is available\n" "$id"
 qm status "$id" > /dev/null 2>&1
 if [ $? -eq 0 ]; then
