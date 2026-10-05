@@ -1,47 +1,64 @@
 # homelab
 
-Scripts and configuration for a single-node Proxmox VE server running on an old ThinkPad.
-Used for learning infrastructure tooling and for hosting a few game servers.
+![Proxmox VE](https://img.shields.io/badge/Proxmox_VE-E57000?logo=proxmox&logoColor=white)
+![Ansible](https://img.shields.io/badge/Ansible-EE0000?logo=ansible&logoColor=white)
+![Debian](https://img.shields.io/badge/Debian_13-A81D33?logo=debian&logoColor=white)
+![Bash](https://img.shields.io/badge/Bash-4EAA25?logo=gnubash&logoColor=white)
+![Last commit](https://img.shields.io/github/last-commit/majkusi/homelab)
+![Open issues](https://img.shields.io/github/issues/majkusi/homelab)
+![License](https://img.shields.io/github/license/majkusi/homelab)
 
-## Layout
+Infrastructure for a single-node Proxmox VE server: VM provisioning scripts, cloud-init templates and Ansible roles.
+
+Built to practise the tooling used in day-to-day infrastructure work, and to host a few game servers for friends.
+
+## Stack
+
+- **Hypervisor:** Proxmox VE on a ThinkPad L440 (i5-4300U, 8 GB RAM)
+- **Guests:** Debian 13 cloud images, provisioned with cloud-init
+- **Provisioning:** Bash scripts around `qm`
+- **Configuration:** Ansible (roles, single `site.yml` playbook)
+- **Planned:** Terraform, Tailscale, game servers in unprivileged LXC, monitoring
+
+## Repository layout
 
 ```
-proxmox/scripts/   shell scripts run on the Proxmox host
-ansible/           playbook, inventory and roles for the VMs
+proxmox/scripts/   VM lifecycle scripts, run on the Proxmox host
+ansible/           inventory, playbook and roles for the VMs
+docs/              operational notes
 ```
 
-## Proxmox
+## Usage
 
-VMs are linked clones of template `9000` (Debian 13 genericcloud, cloud-init).
+Create and remove VMs on the Proxmox host:
 
 ```sh
-./proxmox/scripts/newvm.sh <id> <name> <ip> <disk_size>
+newvm.sh <id> <name> <ip> <disk_size>
+delvm.sh <id>
 ```
 
-Clones the template, sets a static IP (`/24`, gateway `192.168.0.1`), grows the disk
-by `<disk_size>`, sets a console password and starts the VM.
-
-ID ranges: `100-199` VMs, `200-299` LXC, `9000+` templates.
-
-## Ansible
-
-Run from inside `ansible/` so that `ansible.cfg` is picked up:
+Configure the VMs from the workstation:
 
 ```sh
 cd ansible
 ansible-playbook site.yml
 ```
 
-| Role                                              | Purpose                                      |
-| ------------------------------------------------- | -------------------------------------------- |
-| [`base`](ansible/roles/base/)                     | Full upgrade and baseline packages           |
-| [`ssh_hardening`](ansible/roles/ssh_hardening/)   | Key-only SSH, root login disabled            |
+Each Ansible role documents its variables in its own README:
+[`base`](ansible/roles/base/), [`ssh_hardening`](ansible/roles/ssh_hardening/).
 
-Each role has its own README with variables and usage.
+## Documentation
 
-## Workflow
+- [Known pitfalls](docs/pitfalls.md)
 
-Changes are made and committed on a workstation, pushed to GitHub, then pulled on
-the Proxmox host. The host never pushes.
+## Roadmap
 
-Secrets, public IPs and API tokens are kept out of the repository.
+Planned work is tracked in [GitHub Issues](https://github.com/majkusi/homelab/issues) and on the [project board](https://github.com/users/majkusi/projects/6).
+
+## Security
+
+The management interface and SSH are never exposed to the internet. SSH on the VMs is key-only with root login disabled. Secrets, API tokens and public IP addresses are kept out of the repository.
+
+## License
+
+[MIT](LICENSE)
