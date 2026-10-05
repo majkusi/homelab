@@ -19,6 +19,8 @@ if [ $? -ne 0 ]; then
 fi
 
 name=$(qm config "$id" | grep '^name:' | awk '{print $2}')
+ip=$(qm config "$id"| grep '^ipconfig0:' | cut -d "=" -f2 | cut -d "/" -f1)
+
 read -p "Are you sure you want to delete VM: $name? [y/N] " -n 1 -r
 echo
 if [[ ! $REPLY =~ ^[Yy]$ ]]
@@ -42,3 +44,9 @@ if [ $? -ne 0 ]; then
 fi
 
 printf "VM with ID:%s was successfully destroyed\n" "$id"
+
+if [ -z "$ip" ] || [ "$ip" == "dhcp" ]; then
+    exit 0
+fi
+
+printf "Run ssh-keygen -R %s on your Mac\n" "$ip"
