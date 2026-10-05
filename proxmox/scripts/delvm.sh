@@ -18,6 +18,15 @@ if [ $? -ne 0 ]; then
     exit 1
 fi
 
+name=$(qm config "$id" | grep '^name:' | awk '{print $2}')
+read -p "Are you sure you want to delete VM: $name? [y/N] " -n 1 -r
+echo
+if [[ ! $REPLY =~ ^[Yy]$ ]]
+then
+    printf "Aborting VM deletion\n"
+    exit 1
+fi
+
 printf "Stopping VM with ID:%s\n" "$id"
 qm stop "$id"
 if [ $? -ne 0 ]; then
