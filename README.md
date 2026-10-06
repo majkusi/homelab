@@ -30,6 +30,12 @@ docs/              operational notes
 
 ## Usage
 
+One-time setup on the Proxmox host, so the scripts can be run from anywhere (the repo lives in `/root/homelab`):
+
+```sh
+ln -s /root/homelab/proxmox/scripts/newvm.sh /root/homelab/proxmox/scripts/delvm.sh /usr/local/bin
+```
+
 Create and remove VMs on the Proxmox host:
 
 ```sh
