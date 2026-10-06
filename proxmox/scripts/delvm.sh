@@ -6,6 +6,11 @@ if [[ $# -ne 1 ]]; then
 fi
 
 id=$1
+number_regex='^[1-9][0-9]*$'
+if [[ ! "$id" =~ $number_regex ]]; then
+  printf "Error: ID: %s has to be a number\n" "$id" >&2
+  exit 1
+fi
 if [[ $id -ge 9000 ]]; then
     printf "Error: This script can't operate on ID: %s. IDs 9000+ are reserved for templates\n" "$id" >&2
     exit 1

@@ -10,7 +10,30 @@ name="$2"
 ip="$3"
 disk_size="$4"
 
-if [[ ! "$disk_size" =~ ^[1-9][0-9]*$ ]] || [ "$disk_size" -lt 3 ]; then
+ip_regex='^192\.168\.0\.([1-9][0-9]{0,2})$'
+if [[ ! "$ip" =~ $ip_regex ]]; then
+  printf "Error: IP: %s has to be in 192.168.0.0/24\n" "$ip" >&2
+  exit 1
+fi
+
+last_octet="${BASH_REMATCH[1]}"
+if [ "$last_octet" -gt 254 ]; then
+  printf "Error: IP: %s, last octet has to be 1-254\n" "$ip" >&2
+  exit 1
+fi
+
+number_regex='^[1-9][0-9]*$'
+if [[ ! "$id" =~ $number_regex ]]; then
+  printf "Error: ID: %s has to be a number\n" "$id" >&2
+  exit 1
+fi
+
+if [ "$id" -lt 100 ] || [ "$id" -gt 199 ]; then
+  printf "Error: ID: %s has to be within 100-199 range\n" "$id" >&2
+  exit 1
+fi
+
+if [[ ! "$disk_size" =~ $number_regex ]] || [ "$disk_size" -lt 3 ]; then
   printf "Error: Disk size cannot be smaller than 3GB, AND IT HAS TO BE A NUMBER, given by user: %s\n" "$disk_size" >&2
   exit 1
 fi
