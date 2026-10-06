@@ -1,7 +1,7 @@
 #!/bin/bash
 
 if [[ $# -ne 4 ]]; then
-    printf "Illegal number of parameters\n./newvm.sh <id> <name> <ip> <disk_size>\n" >&2
+    printf "Illegal number of parameters\n./newvm.sh <id> <name> <ip> <final_disk_size_in_gb>\n" >&2
     exit 1
 fi
 
@@ -9,6 +9,11 @@ id="$1"
 name="$2"
 ip="$3"
 disk_size="$4"
+
+if [[ ! "$disk_size" =~ ^[1-9][0-9]*$ ]] || [ "$disk_size" -lt 3 ]; then
+  printf "Error: Disk size cannot be smaller than 3GB, AND IT HAS TO BE A NUMBER, given by user: %s\n" "$disk_size" >&2
+  exit 1
+fi
 
 ping -c 1 -W 1 "$ip" > /dev/null
 if [ $? -eq 0 ]; then
@@ -42,7 +47,7 @@ if [ $? -ne 0 ]; then
 fi
 
 printf "\nResize disk\n"
-qm resize "$id" scsi0 +"$disk_size" > /dev/null
+qm disk resize "$id" scsi0 "$disk_size"G > /dev/null
 if [ $? -ne 0 ]; then
   printf "Error: Failed to set disk size\n" >&2
   exit 1

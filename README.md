@@ -33,7 +33,7 @@ docs/              operational notes
 Create and remove VMs on the Proxmox host:
 
 ```sh
-newvm.sh <id> <name> <ip> <disk_size>
+newvm.sh <id> <name> <ip> <final_disk_size_in_gb>
 delvm.sh <id>
 ```
 
