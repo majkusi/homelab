@@ -14,10 +14,11 @@ Baseline configuration for every VM: full system upgrade and installation of bas
 
 ## Variables
 
-| Variable              | Default             | Description                                              |
-| --------------------- | ------------------- | -------------------------------------------------------- |
-| `base_packages`       | `[git, htop, curl]` | Packages for every host. Overriding replaces the list    |
-| `base_packages_extra` | `[]`                | Extra packages per group/host (`group_vars`)             |
+| Variable                     | Default             | Description                                           |
+| ---------------------------- | ------------------- | ----------------------------------------------------- |
+| `base_packages`              | `[git, htop, curl]` | Packages for every host. Overriding replaces the list |
+| `base_packages_extra`        | `[]`                | Extra packages per group/host (`group_vars`)          |
+| `base_update_check_interval` | `3600`              | Sets maximum age of the apt cache in seconds          |
 
 Groups **add** packages via `base_packages_extra` instead of overriding `base_packages`.
 

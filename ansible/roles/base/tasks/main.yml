@@ -3,6 +3,7 @@
   ansible.builtin.apt:
     upgrade: dist
     update_cache: true
+    cache_valid_time: "{{ base_update_check_interval }}"
 - name: Install packages
   ansible.builtin.apt:
     pkg: "{{ base_packages + base_packages_extra }}"

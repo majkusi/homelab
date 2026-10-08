@@ -3,4 +3,5 @@ base_packages:
   - git
   - htop
   - curl
+base_update_check_interval: 3600
 base_packages_extra: []
